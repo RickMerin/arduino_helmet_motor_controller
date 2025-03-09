@@ -2,52 +2,52 @@
 #include <nRF24L01.h>
 #include <RF24.h>
 
-RF24 radio(7, 8); // CE, CSN
-const byte address[6] = "00001";
+#define CE_PIN 9
+#define CSN_PIN 10
+#define BUZZER_PIN 6
+#define MOTOR_PIN 5
 
-#define IN1 2
-#define IN2 3
-#define IN3 4
-#define IN4 5
-#define ENA 6
-#define ENB 9
+RF24 radio(CE_PIN, CSN_PIN);
+const byte address[6] = "00001";  // Must match sender address
 
 void setup() {
-  pinMode(IN1, OUTPUT);
-  pinMode(IN2, OUTPUT);
-  pinMode(IN3, OUTPUT);
-  pinMode(IN4, OUTPUT);
-  pinMode(ENA, OUTPUT);
-  pinMode(ENB, OUTPUT);
-  
-  Serial.begin(9600);
-  radio.begin();
-  radio.openReadingPipe(0, address);
-  radio.setPALevel(RF24_PA_MIN);
-  radio.startListening();
+    Serial.begin(9600);
+    pinMode(BUZZER_PIN, OUTPUT);
+    pinMode(MOTOR_PIN, OUTPUT);
+    digitalWrite(MOTOR_PIN, LOW);  // Ensure motor is off initially
+
+    Serial.println("Initializing nRF24L01...");
+
+    if (!radio.begin()) {
+        Serial.println("❌ nRF24L01 module not detected! Check connections.");
+        while (1);  // Halt execution
+    }
+
+    radio.openReadingPipe(0, address);
+    radio.setPALevel(RF24_PA_LOW);
+    radio.startListening();  // Set to receive mode
+
+    Serial.println("✅ nRF24L01 module detected successfully!");
+
+    // **Buzzer Alert for Successful Module Detection**
+    tone(BUZZER_PIN, 1000);  // Play a 1 kHz tone
+    delay(500);
+    noTone(BUZZER_PIN);
 }
 
 void loop() {
-  if (radio.available()) {
-    long distance;
-    radio.read(&distance, sizeof(distance));
-    
-    if (distance < 10) { // If the helmet is worn (distance < 10 cm)
-      digitalWrite(IN1, HIGH);
-      digitalWrite(IN2, LOW);
-      digitalWrite(IN3, HIGH);
-      digitalWrite(IN4, LOW);
-      analogWrite(ENA, 255);
-      analogWrite(ENB, 255);
-      Serial.println("Motor Running");
-    } else {
-      digitalWrite(IN1, LOW);
-      digitalWrite(IN2, LOW);
-      digitalWrite(IN3, LOW);
-      digitalWrite(IN4, LOW);
-      analogWrite(ENA, 0);
-      analogWrite(ENB, 0);
-      Serial.println("Motor Stopped");
+    if (radio.available()) {
+        char receivedMessage[32] = "";
+        radio.read(&receivedMessage, sizeof(receivedMessage));
+
+        Serial.print("📩 Received: ");
+        Serial.println(receivedMessage);
+
+        if (strcmp(receivedMessage, "TRIGGER_MOTOR") == 0) {
+            Serial.println("⚡ Triggering motor...");
+            digitalWrite(MOTOR_PIN, HIGH);  // Turn on motor
+            delay(3000);  // Keep motor running for 3 seconds
+            digitalWrite(MOTOR_PIN, LOW);  // Turn off motor
+        }
     }
-  }
 }
