@@ -4,50 +4,38 @@
 
 #define CE_PIN 9
 #define CSN_PIN 10
-#define BUZZER_PIN 6
-#define MOTOR_PIN 5
+#define INTERVAL_MS_TRANSMISSION 1000
 
 RF24 radio(CE_PIN, CSN_PIN);
-const byte address[6] = "00001";  // Must match sender address
+
+const byte address[6] = "00001";
 
 void setup() {
-    Serial.begin(9600);
-    pinMode(BUZZER_PIN, OUTPUT);
-    pinMode(MOTOR_PIN, OUTPUT);
-    digitalWrite(MOTOR_PIN, LOW);  // Ensure motor is off initially
+  Serial.begin(115200);
+  Serial.println("Transmitter is ready");
 
-    Serial.println("Initializing nRF24L01...");
+  radio.begin();
+  radio.setAutoAck(false);
+  radio.setDataRate(RF24_250KBPS);
+  radio.setPALevel(RF24_PA_HIGH);
+  radio.openWritingPipe(address);
+  radio.stopListening();
 
-    if (!radio.begin()) {
-        Serial.println("❌ nRF24L01 module not detected! Check connections.");
-        while (1);  // Halt execution
-    }
-
-    radio.openReadingPipe(0, address);
-    radio.setPALevel(RF24_PA_LOW);
-    radio.startListening();  // Set to receive mode
-
-    Serial.println("✅ nRF24L01 module detected successfully!");
-
-    // **Buzzer Alert for Successful Module Detection**
-    tone(BUZZER_PIN, 1000);  // Play a 1 kHz tone
-    delay(500);
-    noTone(BUZZER_PIN);
+  Serial.println("Data Rate: " + String(radio.getDataRate()));
+  Serial.println("PA Level: " + String(radio.getPALevel()));
+  radio.printDetails();
 }
 
 void loop() {
-    if (radio.available()) {
-        char receivedMessage[32] = "";
-        radio.read(&receivedMessage, sizeof(receivedMessage));
+  const char text[] = "Hello";
 
-        Serial.print("📩 Received: ");
-        Serial.println(receivedMessage);
+  if (radio.write(&text, sizeof(text))) {
+    Serial.println("Transmission successful!");
+    Serial.print("Sent message: ");
+    Serial.println(text);
+  } else {
+    Serial.println("Transmission failed!");
+  }
 
-        if (strcmp(receivedMessage, "TRIGGER_MOTOR") == 0) {
-            Serial.println("⚡ Triggering motor...");
-            digitalWrite(MOTOR_PIN, HIGH);  // Turn on motor
-            delay(3000);  // Keep motor running for 3 seconds
-            digitalWrite(MOTOR_PIN, LOW);  // Turn off motor
-        }
-    }
+  delay(INTERVAL_MS_TRANSMISSION);
 }
