@@ -12,8 +12,8 @@ This project ensures a vehicle's motor only runs when the rider is wearing a hel
 #### Ultrasonic Sensor (HC-SR04)
 - **VCC** -> 5V on Arduino Nano  
 - **GND** -> GND on Arduino Nano  
-- **Trig** -> D9 on Arduino Nano  
-- **Echo** -> D10 on Arduino Nano  
+- **Trig** -> D8 on Arduino Nano  
+- **Echo** -> D7 on Arduino Nano  
 
 #### nRF24L01 Transceiver Module
 - **VCC** -> 3.3V on Arduino Nano  
