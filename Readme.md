@@ -5,7 +5,7 @@ This Arduino project uses an ultrasonic distance sensor to detect nearby objects
 ## Features
 - Measures distance using an ultrasonic sensor.
 - Wireless communication using NRF24L01 transceiver modules.
-- Activates a buzzer when the measured distance is below the threshold.
+- Activates a buzzer when the measured distance is below the threshold. **(optional)**
 - Uses SPI communication for fast and efficient data transfer.
 - Serial monitor output for debugging and distance monitoring.
 
