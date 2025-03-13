@@ -1,71 +1,55 @@
-# Helmet Detection and Motor Control System
+# Ultrasonic Distance Alert with NRF24L01
 
-## Overview
+This Arduino project uses an ultrasonic distance sensor to detect nearby objects and send the measured distance wirelessly using the NRF24L01 transceiver module. If the distance is below a specified threshold, the receiver activates a buzzer to alert the user.
 
-This project ensures a vehicle's motor only runs when the rider is wearing a helmet. An ultrasonic sensor detects helmet presence, and an nRF24L01 transceiver module handles wireless communication between the helmet (transmitter) and the vehicle (receiver). If the helmet is not worn or is too far away, the motor will not run.
+## Features
+- Measures distance using an ultrasonic sensor.
+- Wireless communication using NRF24L01 transceiver modules.
+- Activates a buzzer when the measured distance is below the threshold.
+- Uses SPI communication for fast and efficient data transfer.
+- Serial monitor output for debugging and distance monitoring.
 
----
+## Components
+- Arduino (e.g., Uno or Nano)
+- NRF24L01 transceiver modules (2 units)
+- Ultrasonic distance sensor (HC-SR04)
+- Buzzer
+- Connecting wires
+- Breadboard (optional)
 
-## Components and Wiring
+## Circuit Diagram
+1. **Transmitter Setup**:
+   - CE pin to Arduino pin 9
+   - CSN pin to Arduino pin 10
+   - Trig pin of ultrasonic sensor to Arduino pin 8
+   - Echo pin of ultrasonic sensor to Arduino pin 7
 
-### Transmitter (Inside the Helmet)
-#### Ultrasonic Sensor (HC-SR04)
-- **VCC** -> 5V on Arduino Nano  
-- **GND** -> GND on Arduino Nano  
-- **Trig** -> D8 on Arduino Nano  
-- **Echo** -> D7 on Arduino Nano  
+2. **Receiver Setup**:
+   - CE pin to Arduino pin 9
+   - CSN pin to Arduino pin 10
+   - Buzzer pin to Arduino pin 6 **(optional)**
 
-#### nRF24L01 Transceiver Module
-- **VCC** -> 3.3V on Arduino Nano  
-- **GND** -> GND on Arduino Nano  
-- **CE** -> D7 on Arduino Nano  
-- **CSN** -> D8 on Arduino Nano  
-- **SCK** -> D13 on Arduino Nano  
-- **MOSI** -> D11 on Arduino Nano  
-- **MISO** -> D12 on Arduino Nano  
+## Installation
+1. Install the RF24 library from the Arduino Library Manager.
+2. Clone this repository or download the source code.
+3. Open the transmitter and receiver code files in the Arduino IDE.
+4. Upload the transmitter code to one Arduino and the receiver code to the other.
 
-### Receiver (On the Vehicle)
-#### nRF24L01 Transceiver Module
-- **VCC** -> 3.3V on Arduino Nano  
-- **GND** -> GND on Arduino Nano  
-- **CE** -> D7 on Arduino Nano  
-- **CSN** -> D8 on Arduino Nano  
-- **SCK** -> D13 on Arduino Nano  
-- **MOSI** -> D11 on Arduino Nano  
-- **MISO** -> D12 on Arduino Nano  
+## Usage
+1. Power on both the transmitter and receiver.
+2. Open the Serial Monitor at a baud rate of 115200.
+3. Move an object in front of the ultrasonic sensor and observe the distance being sent to the receiver.
+4. The buzzer will sound when the distance is less than or equal to 15 cm. **(optional)**
 
-#### L298N Motor Driver
-- **IN1** -> D2 on Arduino Nano  
-- **IN2** -> D3 on Arduino Nano  
-- **IN3** -> D4 on Arduino Nano  
-- **IN4** -> D5 on Arduino Nano  
-- **ENA** -> D6 on Arduino Nano  
-- **ENB** -> D9 on Arduino Nano  
-- **12V** -> External Power Supply (e.g., 12V Battery)  
-- **GND** -> GND on Arduino Nano and External Power Supply  
-- **5V** -> 5V on Arduino Nano (if needed)  
+## Troubleshooting
+- Ensure both NRF24L01 modules are using the same channel and data rate.
+- Check the wiring connections carefully.
+- Adjust the power level or data rate if the signal is not stable.
 
-#### DC Motor
-- **Motor1** -> OUT1 and OUT2 on L298N  
-- **Motor2** -> OUT3 and OUT4 on L298N  
+## License
+This project is licensed under the MIT License.
 
----
-
-## System Operation
-
-1. **Transmitter (Helmet):**  
-   - The ultrasonic sensor measures the distance to the rider’s head.  
-   - If the distance is less than 10 cm, it signals the receiver that the helmet is worn.  
-
-2. **Receiver (Vehicle):**  
-   - The receiver checks the transmitted data.  
-   - If the helmet is worn (distance < 10 cm), the motor runs. Otherwise, it remains off.  
-
----
-
-## Notes
-- Ensure proper power connections for the nRF24L01 modules.
-- Adjust the helmet detection threshold (default: 10 cm) based on design requirements.
-- Use an adequate external power source for the motor driver.
-- This system ensures that the vehicle can only operate when the rider is wearing the helmet.
+## Acknowledgements
+- SPI and RF24 libraries for Arduino
+- Arduino community for guidance and inspiration
 
