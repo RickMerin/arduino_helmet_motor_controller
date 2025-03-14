@@ -4,6 +4,7 @@
 
 #define CE_PIN 9
 #define CSN_PIN 10
+//#define BUZZER_PIN 6
 
 RF24 radio(CE_PIN, CSN_PIN);
 const byte address[6] = "00001";
@@ -20,8 +21,8 @@ void setup() {
     Serial.println("Receiver Starting...");
 
     // Setup Buzzer
-    pinMode(BUZZER_PIN, OUTPUT);
-    digitalWrite(BUZZER_PIN, LOW);
+    //pinMode(BUZZER_PIN, OUTPUT);
+    //digitalWrite(BUZZER_PIN, LOW);
 
     radio.begin();
     radio.setAutoAck(true);  // Enable ACK
