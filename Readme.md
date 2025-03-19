@@ -53,3 +53,7 @@ This project is licensed under the MIT License.
 - SPI and RF24 libraries for Arduino
 - Arduino community for guidance and inspiration
 
+![L298N With DC Motor](![image](https://github.com/user-attachments/assets/fd24086b-3e1f-4353-bfac-5d275d9d96db)
+)
+
+
