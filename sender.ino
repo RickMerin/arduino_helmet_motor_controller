@@ -4,10 +4,10 @@
 #include <nRF24L01.h>
 #include <RF24.h>
 
-#define trigPin 9
-#define echoPin 10
+#define trigPin 8
+#define echoPin 7
 
-RF24 radio(7, 8); // CE, CSN
+RF24 radio(9, 10); // CE, CSN
 const byte address[6] = "00001";
 float distance;
 
@@ -33,6 +33,9 @@ void loop() {
   Serial.print("Distance: ");
   Serial.println(distance);
 
-  radio.write(&distance, sizeof(distance)); // Send distance data
+
+      radio.write(&distance, sizeof(distance)); // Send distance data
+      Serial.print("Message Sent");
+
   delay(500);
 }
