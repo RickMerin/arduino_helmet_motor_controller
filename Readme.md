@@ -60,7 +60,9 @@ This project is licensed under the MIT License.
 - SPI and RF24 libraries for Arduino
 - Arduino community for guidance and inspiration
 
+![image](https://github.com/user-attachments/assets/e1a73b6e-3a26-402c-b95b-b8a1333317cd)
 
+![image](https://github.com/user-attachments/assets/3c8a8ac1-55e7-4915-be29-95184802b307)
 
 ![image](https://github.com/user-attachments/assets/fd24086b-3e1f-4353-bfac-5d275d9d96db)
 
